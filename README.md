@@ -506,8 +506,8 @@ MIT License - Copyright (c) 2025
 ## 👨‍💻 Author
 
 **Your Name**
-- Email: your.email@example.com
-- GitHub: [@yourusername](https://github.com/yourusername)
+- Email: 2212362@dlu.edu.vn
+- GitHub: [@BonBon-cmd](https://github.com/BonBon-cmd)
 
 ## 🙏 Acknowledgments
 
