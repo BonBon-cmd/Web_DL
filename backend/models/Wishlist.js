@@ -66,9 +66,6 @@ const wishlistSchema = new mongoose.Schema({
 // Index for faster queries
 wishlistSchema.index({ user: 1 });
 
-// Compound index for user and tour (unique)
-wishlistSchema.index({ 'user': 1, 'tours.tour': 1 });
-
 // Pre-find middleware to populate tours with detailed information
 wishlistSchema.pre(/^find/, function(next) {
   this.populate({
