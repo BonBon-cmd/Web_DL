@@ -116,10 +116,11 @@ notificationSchema.pre(/^find/, function(next) {
   next();
 });
 
-// Sort by priority and createdAt
+// Sort by createdAt (most recent first)
+// Note: Priority field sorts alphabetically. For custom priority order,
+// handle sorting in application code or use a numeric priority field.
 notificationSchema.pre(/^find/, function(next) {
-  const priorityOrder = { urgent: 1, high: 2, normal: 3, low: 4 };
-  this.sort({ priority: 1, createdAt: -1 });
+  this.sort({ createdAt: -1 });
   next();
 });
 

@@ -136,8 +136,8 @@ categorySchema.pre('save', async function(next) {
   next();
 });
 
-// Cascade delete children categories
-categorySchema.pre('remove', async function(next) {
+// Cascade delete children categories when using deleteOne
+categorySchema.pre('deleteOne', { document: true, query: false }, async function(next) {
   // Delete all child categories
   await mongoose.model('Category').deleteMany({ parent: this._id });
   next();
