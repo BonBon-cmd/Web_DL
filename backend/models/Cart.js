@@ -83,9 +83,6 @@ const cartSchema = new mongoose.Schema({
   }
 });
 
-// Index for faster user queries
-cartSchema.index({ user: 1 }, { unique: true });
-
 // Populate tour in items when querying
 cartSchema.pre(/^find/, function(next) {
   this.populate({
