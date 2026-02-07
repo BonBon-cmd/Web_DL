@@ -39,9 +39,15 @@ const mongoose = require('mongoose');
  *         paymentDate:
  *           type: string
  *           format: date-time
+ *         paidAt:
+ *           type: string
+ *           format: date-time
  *         refundAmount:
  *           type: number
  *         refundDate:
+ *           type: string
+ *           format: date-time
+ *         refundedAt:
  *           type: string
  *           format: date-time
  *         refundReason:
@@ -83,15 +89,16 @@ const paymentSchema = new mongoose.Schema({
     default: 'pending'
   },
   transactionId: {
-    type: String,
-    unique: true,
-    sparse: true
+    type: String
   },
   paymentGateway: {
     type: String,
     enum: ['momo', 'zalopay', 'vnpay', 'paypal', 'stripe', 'manual']
   },
   paymentDate: {
+    type: Date
+  },
+  paidAt: {
     type: Date
   },
   paymentDetails: {
@@ -106,6 +113,9 @@ const paymentSchema = new mongoose.Schema({
     min: 0
   },
   refundDate: {
+    type: Date
+  },
+  refundedAt: {
     type: Date
   },
   refundReason: {
@@ -139,7 +149,7 @@ const paymentSchema = new mongoose.Schema({
 paymentSchema.index({ booking: 1 });
 paymentSchema.index({ user: 1 });
 paymentSchema.index({ paymentStatus: 1 });
-paymentSchema.index({ transactionId: 1 });
+paymentSchema.index({ transactionId: 1 }, { unique: true, sparse: true });
 paymentSchema.index({ createdAt: -1 });
 
 // Populate booking and user when querying
@@ -166,6 +176,7 @@ paymentSchema.methods.processRefund = async function(amount, reason) {
   
   this.refundAmount = amount;
   this.refundDate = new Date();
+  this.refundedAt = new Date();
   this.refundReason = reason;
   this.refundStatus = 'processing';
   
@@ -180,6 +191,7 @@ paymentSchema.methods.processRefund = async function(amount, reason) {
 paymentSchema.methods.markAsCompleted = async function(transactionId) {
   this.paymentStatus = 'completed';
   this.paymentDate = new Date();
+  this.paidAt = new Date();
   if (transactionId) {
     this.transactionId = transactionId;
   }
