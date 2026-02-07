@@ -171,14 +171,22 @@ categorySchema.pre('save', async function(next) {
       throw new Error('Category cannot be its own parent');
     }
     
-    // Check if parent is a descendant of this category
+    // Check if parent is a descendant of this category (with depth limit)
+    const maxDepth = 10;
     let currentParent = parent;
-    while (currentParent.parentCategory) {
+    let depth = 0;
+    
+    while (currentParent.parentCategory && depth < maxDepth) {
       if (currentParent.parentCategory.toString() === this._id.toString()) {
         throw new Error('Circular reference detected in category hierarchy');
       }
       currentParent = await this.constructor.findById(currentParent.parentCategory);
       if (!currentParent) break;
+      depth++;
+    }
+    
+    if (depth >= maxDepth) {
+      throw new Error('Category hierarchy too deep (maximum 10 levels)');
     }
   }
   next();
