@@ -143,10 +143,11 @@ cartSchema.methods.addItem = async function(tourId, bookingDate, numberOfGuests)
   }
 
   // Check if item already exists
-  const existingItemIndex = this.items.findIndex(
-    item => item.tour.toString() === tourId.toString() && 
-            new Date(item.bookingDate).toDateString() === new Date(bookingDate).toDateString()
-  );
+  const bookingDateStr = new Date(bookingDate).toDateString();
+  const existingItemIndex = this.items.findIndex(item => {
+    return item.tour.toString() === tourId.toString() && 
+           new Date(item.bookingDate).toDateString() === bookingDateStr;
+  });
 
   if (existingItemIndex > -1) {
     // Update existing item

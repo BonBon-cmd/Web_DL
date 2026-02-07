@@ -122,6 +122,7 @@ categorySchema.pre('save', async function(next) {
   // Generate slug from name if not provided or name changed
   if (this.isModified('name')) {
     // Simple slug generation without external dependencies
+    // Note: For full Vietnamese character support, consider adding a transliteration library
     this.slug = this.name
       .toLowerCase()
       .trim()
@@ -136,11 +137,11 @@ categorySchema.pre('save', async function(next) {
       this.level = 0;
     } else {
       const parent = await this.constructor.findById(this.parent);
-      if (parent) {
-        this.level = parent.level + 1;
-      } else {
-        this.level = 0;
+      if (!parent) {
+        // Invalid parent - reject the operation
+        return next(new Error('Parent category not found'));
       }
+      this.level = parent.level + 1;
     }
   }
 

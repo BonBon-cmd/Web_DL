@@ -89,8 +89,7 @@ const paymentSchema = new mongoose.Schema({
     default: 'pending'
   },
   transactionId: {
-    type: String,
-    sparse: true
+    type: String
   },
   paymentGateway: {
     type: String,

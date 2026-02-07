@@ -140,7 +140,7 @@ notificationSchema.methods.isExpired = function() {
   if (!this.expiresAt) {
     return false;
   }
-  return Date.now() > this.expiresAt;
+  return new Date() > this.expiresAt;
 };
 
 /**

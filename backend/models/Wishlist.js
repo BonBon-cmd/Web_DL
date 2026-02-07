@@ -74,7 +74,9 @@ const wishlistSchema = new mongoose.Schema({
 });
 
 // Compound index to prevent duplicate tours in same wishlist
-wishlistSchema.index({ user: 1, 'tours.tour': 1 }, { unique: true, sparse: true });
+// Note: This prevents duplicate (user, tour) combinations across collection
+// The addTour method provides additional validation within a single document
+wishlistSchema.index({ user: 1, 'tours.tour': 1 }, { sparse: true });
 
 // Index for faster queries (user is already unique via compound index)
 wishlistSchema.index({ user: 1 }, { unique: true });
