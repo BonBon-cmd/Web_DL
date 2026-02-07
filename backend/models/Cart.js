@@ -83,10 +83,6 @@ const cartSchema = new mongoose.Schema({
   totalPrice: {
     type: Number,
     default: 0
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now
   }
 }, {
   timestamps: true,
@@ -108,7 +104,6 @@ cartSchema.pre('save', function(next) {
   this.totalPrice = this.items.reduce(function(sum, item) {
     return sum + (item.price * item.numberOfGuests);
   }, 0);
-  this.updatedAt = Date.now();
   next();
 });
 
